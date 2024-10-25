@@ -10,15 +10,21 @@ import {createContext, useReducer, useRef} from "react";
 const mockData = [
     {
         id: 1,
-        createdDate: new Date().getTime(),
+        createdDate: new Date("2024-10-25").getTime(),
         emotionId: 1,
         content: "1번 일기 내용"
     },
     {
         id: 2,
-        createdDate: new Date().getTime(),
+        createdDate: new Date("2024-10-24").getTime(),
         emotionId: 2,
         content: "2번 일기 내용"
+    },
+    {
+        id: 3,
+        createdDate: new Date("2024-09-24").getTime(),
+        emotionId: 3,
+        content: "3번 일기 내용"
     }
 ];
 
@@ -37,8 +43,8 @@ const reducer = (state, action) => {
     }
 };
 
-const DiaryStateContext = createContext(undefined);
-const DiaryDispatchContext = createContext(undefined);
+export const DiaryStateContext = createContext(undefined);
+export const DiaryDispatchContext = createContext(undefined);
 
 const App = () => {
     // noinspection JSCheckFunctionSignatures
@@ -46,13 +52,13 @@ const App = () => {
     const idRef = useRef(mockData.length + 1);
 
     // 새로운 일기 추가
-    const onCreate = (createDate, emotionId, content) => {
+    const onCreate = (createdDate, emotionId, content) => {
         // noinspection JSCheckFunctionSignatures
         dispatch({
             type: "CREATE",
             data: {
                 id: idRef.current++,
-                createDate,
+                createdDate,
                 emotionId,
                 content
             }
@@ -60,13 +66,13 @@ const App = () => {
     };
 
     // 기존 일기 수정
-    const onUpdate = (id, createDate, emotionId, content) => {
+    const onUpdate = (id, createdDate, emotionId, content) => {
         // noinspection JSCheckFunctionSignatures
         dispatch({
             type: "UPDATE",
             data: {
                 id,
-                createDate,
+                createdDate,
                 emotionId,
                 content
             }
@@ -84,28 +90,6 @@ const App = () => {
 
     return (
         <>
-            <button
-                onClick={() => {
-                    onCreate(new Date().getTime(), 1, "Hello");
-                }}
-            >
-                일기 추가 테스트
-            </button>
-            <button
-                onClick={() => {
-                    onUpdate(1, new Date().getTime(), 3, "수정된 일기입니다.");
-                }}
-            >
-                일기 수정 테스트
-            </button>
-            <button
-                onClick={() => {
-                    onDelete(1);
-                }}
-            >
-                일기 삭제 테스트
-            </button>
-
             <DiaryStateContext.Provider value={data}>
                 <DiaryDispatchContext.Provider
                     value={{
